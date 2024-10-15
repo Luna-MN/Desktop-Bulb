@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1hswolx7rfm8"]
+
+[ext_resource type="Script" path="res://Main.cs" id="1_20g2b"]
+[ext_resource type="Texture2D" uid="uid://cbxeyfdnwvi8e" path="res://icon.svg" id="1_fl6f3"]
+[ext_resource type="PackedScene" uid="uid://cyd147ypatir1" path="res://sofa.tscn" id="2_0rcqg"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_20g2b")
+windowScene = ExtResource("2_0rcqg")
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(64, 63)
+texture = ExtResource("1_fl6f3")

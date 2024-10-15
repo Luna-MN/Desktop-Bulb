@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cyd147ypatir1"]
+
+[node name="Window" type="Window"]
+transparent_bg = true
+mode = 2
+position = Vector2i(10, 30)
+size = Vector2i(1145, 620)
