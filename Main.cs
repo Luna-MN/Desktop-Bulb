@@ -31,9 +31,9 @@ public partial class Main : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		RandomMove();
+		RandomMove((float)delta);
 	}
-	public void RandomMove()
+	public void RandomMove(float delta)
 	{
 		if (TargetPosition == new Vector2I(0, 0) || TargetPosition.DistanceTo(GetWindow().Position) < 50 || TargetPosition.DistanceTo(GetWindow().Position) == oldPos)
 		{
@@ -41,7 +41,7 @@ public partial class Main : Node2D
 		}
 
 		Vector2I pos = GetWindow().Position;
-		Vector2 posV2 = LinearInterpolate(TargetPosition, (float)delta, pos);
+		Vector2 posV2 = LinearInterpolate(TargetPosition, delta, pos);
 		oldPos = TargetPosition.DistanceTo(GetWindow().Position);
 		GetWindow().Position = new Vector2I((int)MathF.Ceiling(posV2.X), (int)MathF.Ceiling(posV2.Y));
 		GD.Print(((Vector2)TargetPosition).DistanceTo(GetWindow().Position), " + ", oldPos);
