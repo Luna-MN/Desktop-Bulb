@@ -24,14 +24,15 @@ public partial class Main : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (TargetPosition == new Vector2I(0, 0) || TargetPosition == Position)
+		if (TargetPosition == new Vector2I(0, 0) || ((Vector2)TargetPosition).DistanceTo(GetWindow().Position) < 2f)
 		{
 			TargetPosition = new Vector2I(new RandomNumberGenerator().RandiRange(0, DisplayServer.ScreenGetSize().X), new RandomNumberGenerator().RandiRange(0, DisplayServer.ScreenGetSize().Y));
 		}
+
 		Vector2I pos = GetWindow().Position;
 		Vector2 posV2 = ((Vector2)pos).Lerp(TargetPosition, (float)delta);
 		pos = (Vector2I)posV2;
-		GetWindow().Position += pos;
-		GD.Print(GetWindow().Position);
+		GD.Print(pos);
+		GetWindow().Position = pos;
 	}
 }
