@@ -7,8 +7,9 @@ public partial class Main : Node2D
 	public List<Vector2> screenSizes = new List<Vector2>();
 	[Export]
 	public PackedScene windowScene;
-	public Vector2I TargetPosition = new Vector2I(0, 0);
+	public Vector2 TargetPosition = new Vector2I(0, 0), middle;
 	public List<int> ScreenBounds = new List<int>();
+	public float oldPos;
 	public override void _Ready()
 	{
 		GetViewport().GuiEmbedSubwindows = false;
@@ -18,6 +19,7 @@ public partial class Main : Node2D
 		}
 		ScreenBounds.Add(DisplayServer.ScreenGetSize().X / 2);
 		ScreenBounds.Add(DisplayServer.ScreenGetSize().Y / 2);
+		middle = GetWindow().Position;
 		//GetWindow().Size = new Vector2I(10000, 10000);
 		//GetWindow().Position = new Vector2I(0, 0);
 		//GetWindow().MousePassthroughPolygon picking up bulb and sleep area? 
@@ -30,16 +32,17 @@ public partial class Main : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (TargetPosition == new Vector2I(0, 0) || ((Vector2)TargetPosition).DistanceTo(GetWindow().Position) < 50)
+		if (TargetPosition == new Vector2I(0, 0) || TargetPosition.DistanceTo(GetWindow().Position) < 50 || TargetPosition.DistanceTo(GetWindow().Position) == oldPos)
 		{
-			TargetPosition = new Vector2I(new RandomNumberGenerator().RandiRange(GetWindow().Position.X - ScreenBounds[0], GetWindow().Position.X + ScreenBounds[0]), new RandomNumberGenerator().RandiRange(GetWindow().Position.Y - ScreenBounds[1], GetWindow().Position.Y + ScreenBounds[1]));
-			GD.Print(TargetPosition);
+			TargetPosition = new Vector2(new RandomNumberGenerator().RandiRange((int)middle.X - ScreenBounds[0], (int)middle.X + ScreenBounds[0]), new RandomNumberGenerator().RandiRange((int)middle.Y - ScreenBounds[1], (int)middle.Y + ScreenBounds[1]));
 		}
 
 		Vector2I pos = GetWindow().Position;
 		Vector2 posV2 = LinearInterpolate(TargetPosition, (float)delta, pos);
+		oldPos = TargetPosition.DistanceTo(GetWindow().Position);
 		GetWindow().Position = new Vector2I((int)MathF.Ceiling(posV2.X), (int)MathF.Ceiling(posV2.Y));
-		GD.Print(((Vector2)TargetPosition).DistanceTo(GetWindow().Position), delta);
+		GD.Print(((Vector2)TargetPosition).DistanceTo(GetWindow().Position), " + ", oldPos);
+
 	}
 
 }
