@@ -20,8 +20,7 @@ public partial class Main : Node2D
 		ScreenBounds.Add(DisplayServer.ScreenGetSize().X / 2);
 		ScreenBounds.Add(DisplayServer.ScreenGetSize().Y / 2);
 		middle = GetWindow().Position;
-		//GetWindow().Size = new Vector2I(10000, 10000);
-		//GetWindow().Position = new Vector2I(0, 0);
+
 		//GetWindow().MousePassthroughPolygon picking up bulb and sleep area? 
 	}
 	public Vector2 LinearInterpolate(Vector2 b, float t, Vector2 p)
@@ -31,6 +30,10 @@ public partial class Main : Node2D
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
+	{
+		RandomMove();
+	}
+	public void RandomMove()
 	{
 		if (TargetPosition == new Vector2I(0, 0) || TargetPosition.DistanceTo(GetWindow().Position) < 50 || TargetPosition.DistanceTo(GetWindow().Position) == oldPos)
 		{
@@ -42,7 +45,6 @@ public partial class Main : Node2D
 		oldPos = TargetPosition.DistanceTo(GetWindow().Position);
 		GetWindow().Position = new Vector2I((int)MathF.Ceiling(posV2.X), (int)MathF.Ceiling(posV2.Y));
 		GD.Print(((Vector2)TargetPosition).DistanceTo(GetWindow().Position), " + ", oldPos);
-
 	}
 
 }
