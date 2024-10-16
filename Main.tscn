@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1hswolx7rfm8"]
+[gd_scene load_steps=5 format=3 uid="uid://c1hswolx7rfm8"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_20g2b"]
 [ext_resource type="Texture2D" uid="uid://cbxeyfdnwvi8e" path="res://icon.svg" id="1_fl6f3"]
 [ext_resource type="PackedScene" uid="uid://cyd147ypatir1" path="res://sofa.tscn" id="2_0rcqg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ipwwc"]
+size = Vector2(128, 124)
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_20g2b")
@@ -11,3 +14,12 @@ windowScene = ExtResource("2_0rcqg")
 [node name="Icon" type="Sprite2D" parent="."]
 position = Vector2(64, 63)
 texture = ExtResource("1_fl6f3")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(64, 64)
+shape = SubResource("RectangleShape2D_ipwwc")
+
+[connection signal="mouse_entered" from="Area2D" to="." method="MouseEnterExit"]
+[connection signal="mouse_exited" from="Area2D" to="." method="MouseEnterExit"]
