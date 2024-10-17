@@ -37,19 +37,20 @@ public partial class Main : Node2D
 	public override void _Process(double delta)
 	{
 
-		if (randomChoice == 0)
-		{
-			RandomMove((float)delta);
-		}
-		else if (randomChoice == 1)
-		{
-			sleep();
-		}
-		if (isMouse)
-		{
-			Uppies();
-		}
-		GD.Print(timer.TimeLeft);
+		//if (randomChoice == 0)
+		//{
+		//	RandomMove((float)delta);
+		//}
+		//else if (randomChoice == 1)
+		//{
+		//	sleep();
+		//}
+		//if (isMouse)
+		//{
+		//	Uppies();
+		//}
+		//GD.Print(timer.TimeLeft);
+		Grabies((float)delta);
 	}
 	public void RandomMove(float delta)
 	{
@@ -65,7 +66,6 @@ public partial class Main : Node2D
 	}
 	public void DetectScreenChange()
 	{
-		sleep();
 		if (screenSize != new Vector2(DisplayServer.ScreenGetSize().X, DisplayServer.ScreenGetSize().Y))
 		{
 			ScreenBoundsmin = DisplayServer.ScreenGetPosition();
@@ -82,7 +82,6 @@ public partial class Main : Node2D
 	}
 	public void sleep()
 	{
-
 	}
 	private void MouseEnterExit()
 	{
@@ -91,5 +90,14 @@ public partial class Main : Node2D
 	private void timerTimeout()
 	{
 		randomChoice = new RandomNumberGenerator().RandiRange(0, maxChoice);
+	}
+	private void Grabies(float delta)
+	{
+		if (TargetPosition.DistanceTo(GetViewport().GetMousePosition() + (GetWindow().Position + new Vector2I(-63, -63))) <= 5)
+		{
+			TargetPosition = LinearInterpolate(GetViewport().GetMousePosition() + (GetWindow().Position + new Vector2I(-63, -63)), (float)delta, TargetPosition);
+			GetWindow().Position = new Vector2I((int)MathF.Ceiling(TargetPosition.X), (int)MathF.Ceiling(TargetPosition.Y));
+		}
+
 	}
 }
