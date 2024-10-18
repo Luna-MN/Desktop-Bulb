@@ -9,7 +9,7 @@ public partial class Main : Node2D
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
 	public float oldPos;
-	public bool isMouse, timerStart;
+	public bool isMouse, timerStart, warp = true, moving = true;
 	public Timer timer;
 	public int randomChoice, maxChoice = 1;
 	public Callable callable;
@@ -93,10 +93,27 @@ public partial class Main : Node2D
 	}
 	private void Grabies(float delta)
 	{
-
-		TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-63, -63), (float)delta, GetWindow().Position);
-		GD.Print(TargetPosition);
-		GetWindow().Position = new Vector2I((int)MathF.Ceiling(TargetPosition.X), (int)MathF.Ceiling(TargetPosition.Y));
+		if (((Vector2)DisplayServer.MouseGetPosition()) != (GetWindow().Position + new Vector2I(-30, 30)) && moving == true)
+		{
+			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), (float)delta, GetWindow().Position);
+			if (DisplayServer.MouseGetPosition() < TargetPosition)
+			{
+				TargetPosition = TargetPosition - new Vector2(1, 1);
+			}
+			GD.Print(TargetPosition);
+			GetWindow().Position = new Vector2I((int)MathF.Ceiling(TargetPosition.X), (int)MathF.Ceiling(TargetPosition.Y));
+		}
+		else
+		{
+			TargetPosition = new Vector2(new RandomNumberGenerator().RandiRange(ScreenBoundsmin.X, ScreenBoundsmax.X), new RandomNumberGenerator().RandiRange(ScreenBoundsmin.Y, ScreenBoundsmax.Y));
+			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), (float)delta, GetWindow().Position);
+			Input.WarpMouse(GetWindow().Position + new Vector2I(-30, 30));
+			if (TargetPosition.DistanceTo(GetWindow().Position) == oldPos)
+			{
+				warp = false;
+			}
+			oldPos = TargetPosition.DistanceTo(GetWindow().Position);
+		}
 		// input.warpmouse();
 	}
 }
