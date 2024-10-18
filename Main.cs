@@ -93,11 +93,10 @@ public partial class Main : Node2D
 	}
 	private void Grabies(float delta)
 	{
-		if (TargetPosition.DistanceTo(GetViewport().GetMousePosition() + (GetWindow().Position + new Vector2I(-63, -63))) <= 5)
-		{
-			TargetPosition = LinearInterpolate(GetViewport().GetMousePosition() + (GetWindow().Position + new Vector2I(-63, -63)), (float)delta, TargetPosition);
-			GetWindow().Position = new Vector2I((int)MathF.Ceiling(TargetPosition.X), (int)MathF.Ceiling(TargetPosition.Y));
-		}
 
+		TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-63, -63), (float)delta, GetWindow().Position);
+		GD.Print(TargetPosition);
+		GetWindow().Position = new Vector2I((int)MathF.Ceiling(TargetPosition.X), (int)MathF.Ceiling(TargetPosition.Y));
+		// input.warpmouse();
 	}
 }
