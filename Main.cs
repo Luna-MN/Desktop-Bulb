@@ -29,6 +29,7 @@ public partial class Main : Node2D
 		timer.Connect("timeout", callable);
 		//GetWindow().MousePassthroughPolygon picking up bulb and sleep area? 
 		GD.Print(ScreenBoundsmax, "+", ScreenBoundsmin);
+		randomChoice = 2;
 	}
 	public Vector2 LinearInterpolate(Vector2 b, float t, Vector2 p)
 	{
@@ -63,6 +64,7 @@ public partial class Main : Node2D
 			TargetPosition = new Vector2(RandomMoveGen.RandiRange(ScreenBoundsmin.X, ScreenBoundsmax.X), RandomMoveGen.RandiRange(ScreenBoundsmin.Y, ScreenBoundsmax.Y));
 			warp = true; // picking a position when grab mouse and then instantly picking somthing else to do
 			b++;
+			GD.Print(b);
 		}
 
 		Vector2I pos = GetWindow().Position;
@@ -102,14 +104,13 @@ public partial class Main : Node2D
 	}
 	private void Grabies(float delta)
 	{
-		if (((Vector2)DisplayServer.MouseGetPosition()).DistanceTo(GetWindow().Position) >= 30)
+		if (((Vector2)DisplayServer.MouseGetPosition()).DistanceTo(GetWindow().Position) >= 30 && warp == false)
 		{
 			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), delta * Speed, GetWindow().Position);
 			if (DisplayServer.MouseGetPosition() < TargetPosition)
 			{
 				TargetPosition = TargetPosition - new Vector2(1, 1);
 			}
-			GD.Print(TargetPosition, GetWindow().Position);
 			GetWindow().Position = new Vector2I((int)MathF.Ceiling(TargetPosition.X), (int)MathF.Ceiling(TargetPosition.Y));
 			b = 0;
 		}
@@ -120,7 +121,7 @@ public partial class Main : Node2D
 		}
 		if (warp == true)
 		{
-			if (b <= 2)
+			if (b < 3)
 			{
 				randomChoice = RandomChoice.RandiRange(0, maxChoice);
 			}
