@@ -8,7 +8,7 @@ public partial class Main : Node2D
 	public PackedScene windowScene;
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
-	public float oldPos;
+	public float oldPos, Speed = 0.1f;
 	public bool isMouse, timerStart, warp = false;
 	public Timer timer;
 	public int randomChoice, maxChoice = 2;
@@ -65,7 +65,7 @@ public partial class Main : Node2D
 		}
 
 		Vector2I pos = GetWindow().Position;
-		Vector2 posV2 = LinearInterpolate(TargetPosition, delta, pos);
+		Vector2 posV2 = LinearInterpolate(TargetPosition, delta * Speed, pos);
 		oldPos = TargetPosition.DistanceTo(GetWindow().Position);
 		GetWindow().Position = new Vector2I((int)MathF.Ceiling(posV2.X), (int)MathF.Ceiling(posV2.Y));
 	}
@@ -103,7 +103,7 @@ public partial class Main : Node2D
 	{
 		if (((Vector2)DisplayServer.MouseGetPosition()).DistanceTo(GetWindow().Position) >= 30)
 		{
-			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), (float)delta, GetWindow().Position);
+			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), delta * Speed, GetWindow().Position);
 			if (DisplayServer.MouseGetPosition() < TargetPosition)
 			{
 				TargetPosition = TargetPosition - new Vector2(1, 1);
