@@ -29,7 +29,6 @@ public partial class Main : Node2D
 		timer.Connect("timeout", callable);
 		//GetWindow().MousePassthroughPolygon picking up bulb and sleep area? 
 		GD.Print(ScreenBoundsmax, "+", ScreenBoundsmin);
-		randomChoice = 2;
 	}
 	public Vector2 LinearInterpolate(Vector2 b, float t, Vector2 p)
 	{
