@@ -9,7 +9,7 @@ public partial class Main : Node2D
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
 	public float oldPos, Speed = 0.1f;
-	public bool isMouse, timerStart, warp = false;
+	public bool isMouse, timerStart, warp = false, first = true;
 	public Timer timer;
 	public RandomNumberGenerator RandomMoveGen = new RandomNumberGenerator(), RandomChoice = new RandomNumberGenerator();
 	public int randomChoice, maxChoice = 2, b = 0;
@@ -99,6 +99,7 @@ public partial class Main : Node2D
 	}
 	private void timerTimeout()
 	{
+		first = false;
 		randomChoice = RandomChoice.RandiRange(0, maxChoice);
 		GD.PushWarning(randomChoice);
 	}
