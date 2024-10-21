@@ -119,14 +119,9 @@ public partial class Main : Node2D
 			RandomMove(delta);
 			Input.WarpMouse(new Vector2I(30, 30));
 		}
-		if (warp == true)
+		if (warp == true && b > 2)
 		{
-			if (b < 3)
-			{
-				randomChoice = RandomChoice.RandiRange(0, maxChoice);
-			}
-
+			randomChoice = RandomChoice.RandiRange(0, maxChoice);
 		}
-		// input.warpmouse();
 	}
 }
