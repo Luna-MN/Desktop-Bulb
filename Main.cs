@@ -109,7 +109,7 @@ public partial class Main : Node2D
 			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), delta * Speed, GetWindow().Position);
 			if (DisplayServer.MouseGetPosition() < TargetPosition)
 			{
-				TargetPosition = TargetPosition - new Vector2(1, 1);
+				TargetPosition = -new Vector2(1, 1);
 			}
 			GetWindow().Position = new Vector2I((int)MathF.Ceiling(TargetPosition.X), (int)MathF.Ceiling(TargetPosition.Y));
 			b = 0;
