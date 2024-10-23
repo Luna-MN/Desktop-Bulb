@@ -6,6 +6,8 @@ public partial class Main : Node2D
 	// Called when the node enters the scene tree for the first time.
 	[Export]
 	public PackedScene windowScene;
+	[Export]
+	public AnimatedSprite2D animatedSprite;
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
 	public float oldPos, Speed = 0.1f;
@@ -63,6 +65,15 @@ public partial class Main : Node2D
 			TargetPosition = new Vector2(RandomMoveGen.RandiRange(ScreenBoundsmin.X, ScreenBoundsmax.X), RandomMoveGen.RandiRange(ScreenBoundsmin.Y, ScreenBoundsmax.Y));
 			warp = true; // picking a position when grab mouse and then instantly picking somthing else to do
 			b++;
+			if (TargetPosition.X < GetWindow().Position.X)
+			{
+				animatedSprite.FlipH = true;
+			}
+			else
+			{
+				animatedSprite.FlipH = false;
+			}
+			animatedSprite.Play("Walk");
 			GD.Print(b);
 		}
 
@@ -91,6 +102,7 @@ public partial class Main : Node2D
 	}
 	public void sleep()
 	{
+		animatedSprite.Play("Sleep");
 	}
 	private void MouseEnterExit()
 	{
