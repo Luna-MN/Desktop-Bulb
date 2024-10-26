@@ -63,6 +63,7 @@ public partial class Main : Node2D
 		if (TargetPosition == new Vector2I(0, 0) || TargetPosition.DistanceTo(GetWindow().Position) < 50 || TargetPosition.DistanceTo(GetWindow().Position) == oldPos)
 		{
 			TargetPosition = new Vector2(RandomMoveGen.RandiRange(ScreenBoundsmin.X, ScreenBoundsmax.X), RandomMoveGen.RandiRange(ScreenBoundsmin.Y, ScreenBoundsmax.Y));
+			GD.Print(TargetPosition);
 			warp = true; // picking a position when grab mouse and then instantly picking somthing else to do
 			b++;
 			if (TargetPosition.X < GetWindow().Position.X)
@@ -80,7 +81,13 @@ public partial class Main : Node2D
 		Vector2I pos = GetWindow().Position;
 		Vector2 posV2 = LinearInterpolate(TargetPosition, delta * Speed, pos);
 		oldPos = TargetPosition.DistanceTo(GetWindow().Position);
-		GetWindow().Position = new Vector2I((int)MathF.Ceiling(posV2.X), (int)MathF.Ceiling(posV2.Y));
+		Vector2I newPosition = new Vector2I(
+
+		posV2.X > GetWindow().Position.X ? (int)MathF.Ceiling(posV2.X) : (int)MathF.Floor(posV2.X),
+		posV2.Y > GetWindow().Position.Y ? (int)MathF.Ceiling(posV2.Y) : (int)MathF.Floor(posV2.Y)
+
+		);
+		GetWindow().Position = newPosition;
 	}
 	public bool DetectScreenChange()
 	{
@@ -119,6 +126,15 @@ public partial class Main : Node2D
 		if (((Vector2)DisplayServer.MouseGetPosition()).DistanceTo(GetWindow().Position) >= 30 && warp == false)
 		{
 			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), delta * Speed, GetWindow().Position);
+			if (TargetPosition.X < GetWindow().Position.X)
+			{
+				animatedSprite.FlipH = true;
+			}
+			else
+			{
+				animatedSprite.FlipH = false;
+			}
+			animatedSprite.Play("Walk");
 			if (DisplayServer.MouseGetPosition() < TargetPosition)
 			{
 				TargetPosition = -new Vector2(1, 1);
