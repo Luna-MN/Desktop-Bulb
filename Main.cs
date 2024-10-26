@@ -10,11 +10,11 @@ public partial class Main : Node2D
 	public AnimatedSprite2D animatedSprite;
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
-	public float oldPos, Speed = 0.1f;
+	public float oldPos, Speed = 0.05f;
 	public bool isMouse, timerStart, warp = false, first = true;
 	public Timer timer;
 	public RandomNumberGenerator RandomMoveGen = new RandomNumberGenerator(), RandomChoice = new RandomNumberGenerator();
-	public int randomChoice, maxChoice = 2, b = 0;
+	public int randomChoice, maxChoice = 3, b = 0;
 	public Callable callable;
 	public override void _Ready()
 	{
@@ -53,7 +53,11 @@ public partial class Main : Node2D
 		{
 			Grabies((float)delta);
 		}
-		if (isMouse && warp)
+		else if (randomChoice == 3)
+		{
+			sit();
+		}
+		if (isMouse && (warp || first))
 		{
 			Uppies();
 		}
@@ -82,10 +86,8 @@ public partial class Main : Node2D
 		Vector2 posV2 = LinearInterpolate(TargetPosition, delta * Speed, pos);
 		oldPos = TargetPosition.DistanceTo(GetWindow().Position);
 		Vector2I newPosition = new Vector2I(
-
-		posV2.X > GetWindow().Position.X ? (int)MathF.Ceiling(posV2.X) : (int)MathF.Floor(posV2.X),
-		posV2.Y > GetWindow().Position.Y ? (int)MathF.Ceiling(posV2.Y) : (int)MathF.Floor(posV2.Y)
-
+			posV2.X > GetWindow().Position.X ? (int)MathF.Ceiling(posV2.X) : (int)MathF.Floor(posV2.X),
+			posV2.Y > GetWindow().Position.Y ? (int)MathF.Ceiling(posV2.Y) : (int)MathF.Floor(posV2.Y)
 		);
 		GetWindow().Position = newPosition;
 	}
@@ -110,6 +112,10 @@ public partial class Main : Node2D
 	public void sleep()
 	{
 		animatedSprite.Play("Sleep");
+	}
+	public void sit()
+	{
+		animatedSprite.Play("Sit");
 	}
 	private void MouseEnterExit()
 	{
@@ -139,7 +145,11 @@ public partial class Main : Node2D
 			{
 				TargetPosition = -new Vector2(1, 1);
 			}
-			GetWindow().Position = new Vector2I((int)MathF.Ceiling(TargetPosition.X), (int)MathF.Ceiling(TargetPosition.Y));
+			Vector2I newPosition = new Vector2I(
+				TargetPosition.X > GetWindow().Position.X ? (int)MathF.Ceiling(TargetPosition.X) : (int)MathF.Floor(TargetPosition.X),
+				TargetPosition.Y > GetWindow().Position.Y ? (int)MathF.Ceiling(TargetPosition.Y) : (int)MathF.Floor(TargetPosition.Y)
+			);
+			GetWindow().Position = newPosition;
 			b = 0;
 		}
 		else
@@ -147,7 +157,7 @@ public partial class Main : Node2D
 			RandomMove(delta);
 			Input.WarpMouse(new Vector2I(30, 30));
 		}
-		if (warp == true && b > 2)
+		if (warp == true && b >= 2)
 		{
 			randomChoice = RandomChoice.RandiRange(0, maxChoice);
 		}
