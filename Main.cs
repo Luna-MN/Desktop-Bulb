@@ -11,7 +11,7 @@ public partial class Main : Node2D
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
 	public float oldPos, Speed = 0.05f;
-	public bool isMouse, timerStart, warp = false, first = true;
+	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false;
 	public Timer timer;
 	public RandomNumberGenerator RandomMoveGen = new RandomNumberGenerator(), RandomChoice = new RandomNumberGenerator();
 	public int randomChoice, maxChoice = 3, b = 0;
@@ -41,26 +41,30 @@ public partial class Main : Node2D
 	public override void _Process(double delta)
 	{
 		DetectScreenChange();
-		if (randomChoice == 0)
+		if (!isSleeping)
 		{
-			RandomMove((float)delta);
-		}
-		else if (randomChoice == 1)
-		{
-			sleep();
-		}
-		else if (randomChoice == 2)
-		{
-			Grabies((float)delta);
-		}
-		else if (randomChoice == 3)
-		{
-			sit();
+			if (randomChoice == 0)
+			{
+				RandomMove((float)delta);
+			}
+			else if (randomChoice == 1)
+			{
+				sleep();
+			}
+			else if (randomChoice == 2)
+			{
+				Grabies((float)delta);
+			}
+			else if (randomChoice == 3)
+			{
+				sit();
+			}
 		}
 		if (isMouse && (warp || first))
 		{
 			Uppies();
 		}
+		goSleep((float)delta);
 	}
 	public void RandomMove(float delta)
 	{
@@ -109,6 +113,49 @@ public partial class Main : Node2D
 			GD.Print(GetViewport().GetMousePosition());
 		}
 	}
+	public void goSleep(float delta)
+	{
+		if (isMouse && Input.IsMouseButtonPressed(MouseButton.Right))
+		{
+			isSleeping = !isSleeping;
+		}
+		if (isSleeping && !oldSleeping)
+		{
+			animatedSprite.Play("Walk");
+		}
+		if (isSleeping)
+		{
+			if (GetWindow().Position != new Vector2I(ScreenBoundsmax.X - 100, ScreenBoundsmax.Y - 100) && !inhibitMove)
+			{
+				TargetPosition = LinearInterpolate(new Vector2I(ScreenBoundsmax.X - 100, ScreenBoundsmax.Y - 100), delta * Speed, GetWindow().Position);
+				if (TargetPosition.X < GetWindow().Position.X)
+				{
+					animatedSprite.FlipH = true;
+				}
+				else
+				{
+					animatedSprite.FlipH = false;
+				}
+				Vector2I newPosition = new Vector2I(
+					TargetPosition.X > GetWindow().Position.X ? (int)MathF.Ceiling(TargetPosition.X) : (int)MathF.Floor(TargetPosition.X),
+					TargetPosition.Y > GetWindow().Position.Y ? (int)MathF.Ceiling(TargetPosition.Y) : (int)MathF.Floor(TargetPosition.Y)
+				);
+				GetWindow().Position = newPosition;
+			}
+			else
+			{
+				sleep();
+				inhibitMove = true;
+			}
+
+		}
+		else if (isSleeping != oldSleeping)
+		{
+			inhibitMove = false;
+			randomChoice = 0;
+		}
+		oldSleeping = isSleeping;
+	}
 	public void sleep()
 	{
 		animatedSprite.Play("Sleep");
@@ -129,7 +176,7 @@ public partial class Main : Node2D
 	}
 	private void Grabies(float delta)
 	{
-		if (((Vector2)DisplayServer.MouseGetPosition()).DistanceTo(GetWindow().Position) >= 30 && warp == false)
+		if (((Vector2)DisplayServer.MouseGetPosition()).DistanceTo(GetWindow().Position) >= 50 && warp == false)
 		{
 			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), delta * Speed, GetWindow().Position);
 			if (TargetPosition.X < GetWindow().Position.X)
@@ -141,10 +188,6 @@ public partial class Main : Node2D
 				animatedSprite.FlipH = false;
 			}
 			animatedSprite.Play("Walk");
-			if (DisplayServer.MouseGetPosition() < TargetPosition)
-			{
-				TargetPosition = -new Vector2(1, 1);
-			}
 			Vector2I newPosition = new Vector2I(
 				TargetPosition.X > GetWindow().Position.X ? (int)MathF.Ceiling(TargetPosition.X) : (int)MathF.Floor(TargetPosition.X),
 				TargetPosition.Y > GetWindow().Position.Y ? (int)MathF.Ceiling(TargetPosition.Y) : (int)MathF.Floor(TargetPosition.Y)
