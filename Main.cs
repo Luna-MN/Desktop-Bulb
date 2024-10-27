@@ -115,10 +115,6 @@ public partial class Main : Node2D
 	}
 	public void goSleep(float delta)
 	{
-		if (isMouse && Input.IsMouseButtonPressed(MouseButton.Right))
-		{
-			isSleeping = !isSleeping;
-		}
 		if (isSleeping && !oldSleeping)
 		{
 			animatedSprite.Play("Walk");
@@ -204,5 +200,17 @@ public partial class Main : Node2D
 		{
 			randomChoice = RandomChoice.RandiRange(0, maxChoice);
 		}
+
+	}
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+		{
+			if (isMouse && Input.IsMouseButtonPressed(MouseButton.Right))
+			{
+				isSleeping = !isSleeping;
+			}
+		}
 	}
 }
+
