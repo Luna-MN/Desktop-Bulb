@@ -76,13 +76,13 @@ public partial class Main : Node2D
 			b++;
 			if (TargetPosition.X < GetWindow().Position.X)
 			{
-				animatedSprite.FlipH = true;
+				animatedSprite.FlipH = false;
 			}
 			else
 			{
-				animatedSprite.FlipH = false;
+				animatedSprite.FlipH = true;
 			}
-			animatedSprite.Play("Walk");
+			animatedSprite.Play("Walk2");
 			GD.Print(b);
 		}
 
@@ -117,7 +117,7 @@ public partial class Main : Node2D
 	{
 		if (isSleeping && !oldSleeping)
 		{
-			animatedSprite.Play("Walk");
+			animatedSprite.Play("Walk2");
 		}
 		if (isSleeping)
 		{
@@ -126,11 +126,11 @@ public partial class Main : Node2D
 				TargetPosition = LinearInterpolate(new Vector2I(ScreenBoundsmax.X - 100, ScreenBoundsmax.Y - 100), delta * Speed, GetWindow().Position);
 				if (TargetPosition.X < GetWindow().Position.X)
 				{
-					animatedSprite.FlipH = true;
+					animatedSprite.FlipH = false;
 				}
 				else
 				{
-					animatedSprite.FlipH = false;
+					animatedSprite.FlipH = true;
 				}
 				Vector2I newPosition = new Vector2I(
 					TargetPosition.X > GetWindow().Position.X ? (int)MathF.Ceiling(TargetPosition.X) : (int)MathF.Floor(TargetPosition.X),
