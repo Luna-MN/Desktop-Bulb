@@ -1,15 +1,27 @@
 [gd_scene load_steps=5 format=3 uid="uid://c1hswolx7rfm8"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_20g2b"]
-[ext_resource type="PackedScene" uid="uid://cyd147ypatir1" path="res://sofa.tscn" id="2_0rcqg"]
 [ext_resource type="SpriteFrames" uid="uid://b4ji7sr7ny5kp" path="res://new_sprite_frames.tres" id="4_lk8qd"]
+
+[sub_resource type="PackedScene" id="PackedScene_t2fa7"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("Window", "Window", "transparent_bg", "mode", "position", "size"),
+"node_count": 1,
+"node_paths": [],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 4, 2, 0, 3, 1, 4, 2, 5, 3, 0),
+"variants": [true, 2, Vector2i(10, 30), Vector2i(1145, 620)],
+"version": 3
+}
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ipwwc"]
 size = Vector2(128, 123)
 
 [node name="Node2D" type="Node2D" node_paths=PackedStringArray("animatedSprite")]
 script = ExtResource("1_20g2b")
-windowScene = ExtResource("2_0rcqg")
+windowScene = SubResource("PackedScene_t2fa7")
 animatedSprite = NodePath("AnimatedSprite2D")
 
 [node name="Area2D" type="Area2D" parent="."]

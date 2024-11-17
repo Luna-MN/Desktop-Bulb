@@ -16,7 +16,7 @@ public partial class Main : Node2D
 	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false;
 	public Timer timer;
 	public RandomNumberGenerator RandomMoveGen = new RandomNumberGenerator(), RandomChoice = new RandomNumberGenerator();
-	public int randomChoice, maxChoice = 3, b = 0;
+	public int randomChoice, maxChoice = 2, b = 0;
 	public Callable callable;
 	public override void _Ready()
 	{
@@ -31,8 +31,6 @@ public partial class Main : Node2D
 		AddChild(timer);
 		callable = new Callable(this, "timerTimeout");
 		timer.Connect("timeout", callable);
-		//GetWindow().MousePassthroughPolygon picking up bulb and sleep area? 
-		GD.Print(ScreenBoundsmax, "+", ScreenBoundsmin);
 	}
 	public Vector2 LinearInterpolate(Vector2 b, float t, Vector2 p)
 	{
@@ -57,10 +55,10 @@ public partial class Main : Node2D
 			{
 				Grabies((float)delta);
 			}
-			else if (randomChoice == 3)
-			{
-				sit();
-			}
+			//			else if (randomChoice == 3)
+			//			{
+			//				sit();
+			//			}
 		}
 		if (isMouse && (warp || first))
 		{
@@ -162,10 +160,10 @@ public partial class Main : Node2D
 		}
 
 	}
-	public void sit()
-	{
-		animatedSprite.Play("Sit");
-	}
+	//	public void sit()
+	//	{
+	//		animatedSprite.Play("Sit");
+	//	}
 	private void MouseEnterExit()
 	{
 		isMouse = !isMouse;
@@ -174,6 +172,7 @@ public partial class Main : Node2D
 	{
 		first = false;
 		randomChoice = RandomChoice.RandiRange(0, maxChoice);
+		sleeping = sleeping ? false : sleeping;
 		GD.PushWarning(randomChoice);
 	}
 	private void Grabies(float delta)
@@ -215,6 +214,7 @@ public partial class Main : Node2D
 			if (isMouse && Input.IsMouseButtonPressed(MouseButton.Right))
 			{
 				isSleeping = !isSleeping;
+				sleeping = sleeping ? false : sleeping;
 			}
 		}
 	}
