@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Desktop Bulb"
 config/features=PackedStringArray("4.1", "C#", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://Icon_B.png"
 
 [display]
 
