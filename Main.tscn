@@ -5,7 +5,7 @@
 [ext_resource type="SpriteFrames" uid="uid://b4ji7sr7ny5kp" path="res://new_sprite_frames.tres" id="4_lk8qd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ipwwc"]
-size = Vector2(128, 124)
+size = Vector2(128, 123)
 
 [node name="Node2D" type="Node2D" node_paths=PackedStringArray("animatedSprite")]
 script = ExtResource("1_20g2b")
@@ -15,14 +15,16 @@ animatedSprite = NodePath("AnimatedSprite2D")
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(64, 64)
+position = Vector2(64, 63.5)
 shape = SubResource("RectangleShape2D_ipwwc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(62, 67)
-scale = Vector2(1.86901, 1.74012)
+position = Vector2(63, 62)
+scale = Vector2(1.57425, 1.49252)
 sprite_frames = ExtResource("4_lk8qd")
-animation = &"Walk2"
+animation = &"GoToSleep"
 
 [connection signal="mouse_entered" from="Area2D" to="." method="MouseEnterExit"]
 [connection signal="mouse_exited" from="Area2D" to="." method="MouseEnterExit"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimationFinished"]
+[connection signal="animation_looped" from="AnimatedSprite2D" to="." method="OnAnimationFinished"]

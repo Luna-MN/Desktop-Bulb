@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq.Expressions;
 public partial class Main : Node2D
 {
 	// Called when the node enters the scene tree for the first time.
@@ -11,7 +13,7 @@ public partial class Main : Node2D
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
 	public float oldPos, Speed = 0.05f;
-	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false;
+	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false;
 	public Timer timer;
 	public RandomNumberGenerator RandomMoveGen = new RandomNumberGenerator(), RandomChoice = new RandomNumberGenerator();
 	public int randomChoice, maxChoice = 3, b = 0;
@@ -154,7 +156,11 @@ public partial class Main : Node2D
 	}
 	public void sleep()
 	{
-		animatedSprite.Play("Sleep");
+		if (!sleeping)
+		{
+			animatedSprite.Play("GoToSleep");
+		}
+
 	}
 	public void sit()
 	{
@@ -177,13 +183,13 @@ public partial class Main : Node2D
 			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), delta * Speed, GetWindow().Position);
 			if (TargetPosition.X < GetWindow().Position.X)
 			{
-				animatedSprite.FlipH = true;
+				animatedSprite.FlipH = false;
 			}
 			else
 			{
-				animatedSprite.FlipH = false;
+				animatedSprite.FlipH = true;
 			}
-			animatedSprite.Play("Walk");
+			animatedSprite.Play("Walk2");
 			Vector2I newPosition = new Vector2I(
 				TargetPosition.X > GetWindow().Position.X ? (int)MathF.Ceiling(TargetPosition.X) : (int)MathF.Floor(TargetPosition.X),
 				TargetPosition.Y > GetWindow().Position.Y ? (int)MathF.Ceiling(TargetPosition.Y) : (int)MathF.Floor(TargetPosition.Y)
@@ -210,6 +216,14 @@ public partial class Main : Node2D
 			{
 				isSleeping = !isSleeping;
 			}
+		}
+	}
+	private void OnAnimationFinished()
+	{
+		if (animatedSprite.Animation == "GoToSleep")
+		{
+			animatedSprite.Play("Sleep");
+			sleeping = true;
 		}
 	}
 }
