@@ -171,9 +171,12 @@ public partial class Main : Node2D
 	private void timerTimeout()
 	{
 		first = false;
-		randomChoice = RandomChoice.RandiRange(0, maxChoice);
-		sleeping = sleeping ? false : sleeping;
-		GD.PushWarning(randomChoice);
+		if (!isSleeping)
+		{
+			randomChoice = RandomChoice.RandiRange(0, maxChoice);
+			sleeping = sleeping ? false : sleeping;
+			GD.PushWarning(randomChoice);
+		}
 	}
 	private void Grabies(float delta)
 	{
