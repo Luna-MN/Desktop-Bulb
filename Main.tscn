@@ -37,6 +37,9 @@ scale = Vector2(1.57425, 1.49252)
 sprite_frames = ExtResource("4_lk8qd")
 animation = &"GoToSleep"
 
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(87, 80)
+
 [connection signal="mouse_entered" from="Area2D" to="." method="MouseEnterExit"]
 [connection signal="mouse_exited" from="Area2D" to="." method="MouseEnterExit"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimationFinished"]

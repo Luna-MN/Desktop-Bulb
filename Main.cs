@@ -31,6 +31,7 @@ public partial class Main : Node2D
 		AddChild(timer);
 		callable = new Callable(this, "timerTimeout");
 		timer.Connect("timeout", callable);
+		randomChoice = 2;
 	}
 	public Vector2 LinearInterpolate(Vector2 b, float t, Vector2 p)
 	{
@@ -66,7 +67,7 @@ public partial class Main : Node2D
 		}
 		goSleep((float)delta);
 	}
-	public void RandomMove(float delta)
+	public Vector2 RandomMove(float delta)
 	{
 		if (TargetPosition == new Vector2I(0, 0) || TargetPosition.DistanceTo(GetWindow().Position) < 50 || TargetPosition.DistanceTo(GetWindow().Position) == oldPos)
 		{
@@ -94,6 +95,7 @@ public partial class Main : Node2D
 			posV2.Y > GetWindow().Position.Y ? (int)MathF.Ceiling(posV2.Y) : (int)MathF.Floor(posV2.Y)
 		);
 		GetWindow().Position = newPosition;
+		return TargetPosition;
 	}
 	public bool DetectScreenChange()
 	{
@@ -201,8 +203,16 @@ public partial class Main : Node2D
 		}
 		else
 		{
-			RandomMove(delta);
-			Input.WarpMouse(new Vector2I(30, 30));
+			TargetPosition = RandomMove(delta);
+			if (TargetPosition < GetWindow().Position)
+			{
+				Input.WarpMouse(new Vector2I(40, 77));
+			}
+			else
+			{
+				Input.WarpMouse(new Vector2I(80, 77));
+			}
+
 		}
 		if (warp == true && b >= 2)
 		{
