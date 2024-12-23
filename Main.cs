@@ -31,7 +31,6 @@ public partial class Main : Node2D
 		AddChild(timer);
 		callable = new Callable(this, "timerTimeout");
 		timer.Connect("timeout", callable);
-		randomChoice = 2;
 	}
 	public Vector2 LinearInterpolate(Vector2 b, float t, Vector2 p)
 	{

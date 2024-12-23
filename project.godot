@@ -11,8 +11,10 @@ config_version=5
 [application]
 
 config/name="Desktop Bulb"
+run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.1", "C#", "GL Compatibility")
 config/icon="res://Icon_B.png"
+config/windows_native_icon="res://Icon.ico"
 
 [display]
 
