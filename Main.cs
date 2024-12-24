@@ -13,7 +13,7 @@ public partial class Main : Node2D
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
 	public float oldPos, Speed = 0.05f;
-	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false;
+	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false, noGrab = false;
 	public Timer timer;
 	public RandomNumberGenerator RandomMoveGen = new RandomNumberGenerator(), RandomChoice = new RandomNumberGenerator();
 	public int randomChoice, maxChoice = 2, b = 0;
@@ -53,7 +53,14 @@ public partial class Main : Node2D
 			}
 			else if (randomChoice == 2)
 			{
-				Grabies((float)delta);
+				if (!noGrab)
+				{
+					Grabies((float)delta);
+				}
+				else
+				{
+					RandomMove((float)delta);
+				}
 			}
 			//			else if (randomChoice == 3)
 			//			{
@@ -227,6 +234,13 @@ public partial class Main : Node2D
 			{
 				isSleeping = !isSleeping;
 				sleeping = sleeping ? false : sleeping;
+			}
+		}
+		if (@event is InputEventKey keyEvent && keyEvent.Pressed)
+		{
+			if (Input.IsKeyPressed(Key.Kp0))
+			{
+				noGrab = !noGrab;
 			}
 		}
 	}
