@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=25 format=3 uid="uid://b4ji7sr7ny5kp"]
+[gd_resource type="SpriteFrames" load_steps=28 format=3 uid="uid://b4ji7sr7ny5kp"]
 
 [ext_resource type="Texture2D" uid="uid://dh8gxjvu3kfcn" path="res://Bubasaur_sprite sheet.png" id="1_iab2k"]
 [ext_resource type="Texture2D" uid="uid://jdu1fiyb8lti" path="res://sleepF1.png" id="2_rww70"]
@@ -43,6 +43,18 @@ region = Rect2(658, 0, 94, 86)
 [sub_resource type="AtlasTexture" id="AtlasTexture_qk8a3"]
 atlas = ExtResource("2_rww70")
 region = Rect2(752, 0, 94, 86)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cyuql"]
+atlas = ExtResource("2_rww70")
+region = Rect2(188, 0, 94, 86)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3f1us"]
+atlas = ExtResource("2_rww70")
+region = Rect2(94, 0, 94, 86)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3fudd"]
+atlas = ExtResource("2_rww70")
+region = Rect2(0, 0, 94, 86)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hxou6"]
 atlas = ExtResource("1_iab2k")
@@ -134,6 +146,20 @@ animations = [{
 "loop": true,
 "name": &"Sleep",
 "speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cyuql")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3f1us")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3fudd")
+}],
+"loop": true,
+"name": &"WakeUp",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,

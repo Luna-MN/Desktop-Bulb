@@ -13,7 +13,7 @@ public partial class Main : Node2D
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
 	public float oldPos, Speed = 0.05f;
-	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false, noGrab = false;
+	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false, noGrab = false, wakeUp = false;
 	public Timer timer;
 	public RandomNumberGenerator RandomMoveGen = new RandomNumberGenerator(), RandomChoice = new RandomNumberGenerator();
 	public int randomChoice, maxChoice = 2, b = 0;
@@ -41,7 +41,7 @@ public partial class Main : Node2D
 	public override void _Process(double delta)
 	{
 		DetectScreenChange();
-		if (!isSleeping)
+		if (!isSleeping && !wakeUp)
 		{
 			if (randomChoice == 0)
 			{
@@ -62,10 +62,18 @@ public partial class Main : Node2D
 					RandomMove((float)delta);
 				}
 			}
+			else
+			{
+				randomChoice = RandomChoice.RandiRange(0, maxChoice);
+			}
 			//			else if (randomChoice == 3)
 			//			{
 			//				sit();
 			//			}
+		}
+		if (wakeUp)
+		{
+			animatedSprite.Play("WakeUp");
 		}
 		if (isMouse && (warp || first))
 		{
@@ -179,6 +187,10 @@ public partial class Main : Node2D
 	private void timerTimeout()
 	{
 		first = false;
+		if (randomChoice == 1)
+		{
+			wakeUp = true;
+		}
 		if (!isSleeping)
 		{
 			randomChoice = RandomChoice.RandiRange(0, maxChoice);
@@ -210,13 +222,16 @@ public partial class Main : Node2D
 		else
 		{
 			TargetPosition = RandomMove(delta);
-			if (TargetPosition < GetWindow().Position)
+			if (TargetPosition.DistanceTo(GetWindow().Position) > 10) // Add a condition to check distance
 			{
-				Input.WarpMouse(new Vector2I(40, 77));
-			}
-			else
-			{
-				Input.WarpMouse(new Vector2I(80, 77));
+				if (TargetPosition.X < GetWindow().Position.X)
+				{
+					Input.WarpMouse(new Vector2I(40, 77));
+				}
+				else
+				{
+					Input.WarpMouse(new Vector2I(80, 77));
+				}
 			}
 
 		}
@@ -241,6 +256,7 @@ public partial class Main : Node2D
 			if (Input.IsKeyPressed(Key.Kp0))
 			{
 				noGrab = !noGrab;
+				GD.Print(noGrab);
 			}
 		}
 	}
@@ -250,6 +266,10 @@ public partial class Main : Node2D
 		{
 			animatedSprite.Play("Sleep");
 			sleeping = true;
+		}
+		if (animatedSprite.Animation == "WakeUp")
+		{
+			wakeUp = false;
 		}
 	}
 }

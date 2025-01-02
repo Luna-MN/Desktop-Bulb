@@ -35,7 +35,7 @@ debug_color = Color(0.847059, 0.0980392, 0.87451, 0.419608)
 position = Vector2(63, 62)
 scale = Vector2(1.57425, 1.49252)
 sprite_frames = ExtResource("4_lk8qd")
-animation = &"GoToSleep"
+animation = &"WakeUp"
 
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2(87, 80)
