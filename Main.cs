@@ -13,7 +13,7 @@ public partial class Main : Node2D
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
 	public float oldPos, Speed = 0.05f;
-	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false, noGrab = false, wakeUp = false;
+	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false, noGrab = false, wakeUp = false, sitting = false, foreverSit = false;
 	public Timer timer;
 	public RandomNumberGenerator RandomMoveGen = new RandomNumberGenerator(), RandomChoice = new RandomNumberGenerator();
 	public int randomChoice, maxChoice = 2, b = 0;
@@ -41,7 +41,7 @@ public partial class Main : Node2D
 	public override void _Process(double delta)
 	{
 		DetectScreenChange();
-		if (!isSleeping && !wakeUp)
+		if (!isSleeping && !wakeUp && !foreverSit)
 		{
 			if (randomChoice == 0)
 			{
@@ -62,18 +62,23 @@ public partial class Main : Node2D
 					RandomMove((float)delta);
 				}
 			}
+			else if (randomChoice == 3)
+			{
+				sit();
+			}
 			else
 			{
 				randomChoice = RandomChoice.RandiRange(0, maxChoice);
 			}
-			//			else if (randomChoice == 3)
-			//			{
-			//				sit();
-			//			}
+
 		}
 		if (wakeUp)
 		{
 			animatedSprite.Play("WakeUp");
+		}
+		if (foreverSit && !sitting)
+		{
+			sit();
 		}
 		if (isMouse && (warp || first))
 		{
@@ -176,10 +181,14 @@ public partial class Main : Node2D
 		}
 
 	}
-	//	public void sit()
-	//	{
-	//		animatedSprite.Play("Sit");
-	//	}
+	public void sit()
+	{
+		if (!sitting)
+		{
+			animatedSprite.Play("SitDown");
+		}
+
+	}
 	private void MouseEnterExit()
 	{
 		isMouse = !isMouse;
@@ -187,6 +196,7 @@ public partial class Main : Node2D
 	private void timerTimeout()
 	{
 		first = false;
+		sitting = false;
 		if (randomChoice == 1)
 		{
 			wakeUp = true;
@@ -238,6 +248,7 @@ public partial class Main : Node2D
 		if (warp == true && b >= 2)
 		{
 			randomChoice = RandomChoice.RandiRange(0, maxChoice);
+			warp = false;
 		}
 
 	}
@@ -249,6 +260,10 @@ public partial class Main : Node2D
 			{
 				isSleeping = !isSleeping;
 				sleeping = sleeping ? false : sleeping;
+			}
+			if (isMouse && Input.IsMouseButtonPressed(MouseButton.Middle))
+			{
+				foreverSit = !foreverSit;
 			}
 		}
 		if (@event is InputEventKey keyEvent && keyEvent.Pressed)
@@ -267,9 +282,15 @@ public partial class Main : Node2D
 			animatedSprite.Play("Sleep");
 			sleeping = true;
 		}
-		if (animatedSprite.Animation == "WakeUp")
+		if (animatedSprite.Animation == "WakeUp" && wakeUp)
 		{
 			wakeUp = false;
+			animatedSprite.Play("Stand");
+		}
+		if (animatedSprite.Animation == "SitDown")
+		{
+			sitting = true;
+			animatedSprite.Play("Sit");
 		}
 	}
 }
