@@ -13,11 +13,12 @@ public partial class Main : Node2D
 	public Vector2 TargetPosition = new Vector2(0, 0), middle, screenSize;
 	public Vector2I ScreenBoundsmin, ScreenBoundsmax;
 	public float oldPos, Speed = 0.05f;
-	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false, noGrab = false, wakeUp = false, sitting = false, foreverSit = false;
+	public bool isMouse, timerStart, warp = false, first = true, isSleeping = false, oldSleeping = false, inhibitMove = false, sleeping = false, noGrab = false, wakeUp = false, sitting = false, foreverSit = false, waitToFinish, sleepy = false;
 	public Timer timer;
 	public RandomNumberGenerator RandomMoveGen = new RandomNumberGenerator(), RandomChoice = new RandomNumberGenerator();
-	public int randomChoice, maxChoice = 2, b = 0;
+	public int randomChoice, maxChoice = 3, b = 0;
 	public Callable callable;
+	public int oldRandomChoice;
 	public override void _Ready()
 	{
 		GetViewport().GuiEmbedSubwindows = false;
@@ -46,31 +47,30 @@ public partial class Main : Node2D
 			if (randomChoice == 0)
 			{
 				RandomMove((float)delta);
+				oldRandomChoice = randomChoice;
 			}
 			else if (randomChoice == 1)
 			{
 				sleep();
+				oldRandomChoice = randomChoice;
 			}
 			else if (randomChoice == 2)
 			{
-				if (!noGrab)
-				{
-					Grabies((float)delta);
-				}
-				else
-				{
-					RandomMove((float)delta);
-				}
+				sit();
+				oldRandomChoice = randomChoice;
 			}
 			else if (randomChoice == 3)
 			{
-				sit();
+				foreverSleepy();
 			}
 			else
 			{
 				randomChoice = RandomChoice.RandiRange(0, maxChoice);
 			}
-
+		}
+		if (randomChoice != 3)
+		{
+			sleepy = false;
 		}
 		if (wakeUp)
 		{
@@ -115,6 +115,21 @@ public partial class Main : Node2D
 		);
 		GetWindow().Position = newPosition;
 		return TargetPosition;
+	}
+	private void roll()
+	{
+		if (animatedSprite.Animation != "Roll")
+		{
+			animatedSprite.Play("Roll");
+		}
+	}
+	private void foreverSleepy()
+	{
+		if (!sleepy)
+		{
+			animatedSprite.Play("SitDown");
+			sleepy = true;
+		}
 	}
 	public bool DetectScreenChange()
 	{
@@ -177,7 +192,15 @@ public partial class Main : Node2D
 	{
 		if (!sleeping)
 		{
-			animatedSprite.Play("GoToSleep");
+			if (oldRandomChoice == 2)
+			{
+				animatedSprite.Play("SleepFromSit");
+				waitToFinish = true;
+			}
+			else if (!waitToFinish)
+			{
+				animatedSprite.Play("GoToSleep");
+			}
 		}
 
 	}
@@ -185,7 +208,16 @@ public partial class Main : Node2D
 	{
 		if (!sitting)
 		{
-			animatedSprite.Play("SitDown");
+			if (oldRandomChoice == 1)
+			{
+				animatedSprite.Play("SitFromSleep");
+				waitToFinish = true;
+			}
+			else if (!waitToFinish)
+			{
+				animatedSprite.Play("SitDown");
+			}
+
 		}
 
 	}
@@ -210,6 +242,7 @@ public partial class Main : Node2D
 	}
 	private void Grabies(float delta)
 	{
+		animatedSprite.Play("Walk2");
 		if (((Vector2)DisplayServer.MouseGetPosition()).DistanceTo(GetWindow().Position) >= 50 && warp == false)
 		{
 			TargetPosition = LinearInterpolate(DisplayServer.MouseGetPosition() + new Vector2I(-30, -30), delta * Speed, GetWindow().Position);
@@ -259,11 +292,16 @@ public partial class Main : Node2D
 			if (isMouse && Input.IsMouseButtonPressed(MouseButton.Right))
 			{
 				isSleeping = !isSleeping;
+				foreverSit = false;
 				sleeping = sleeping ? false : sleeping;
+				sitting = false;
 			}
 			if (isMouse && Input.IsMouseButtonPressed(MouseButton.Middle))
 			{
 				foreverSit = !foreverSit;
+				sitting = false;
+				sleeping = false;
+				isSleeping = false;
 			}
 		}
 		if (@event is InputEventKey keyEvent && keyEvent.Pressed)
@@ -281,6 +319,7 @@ public partial class Main : Node2D
 		{
 			animatedSprite.Play("Sleep");
 			sleeping = true;
+			oldRandomChoice = 1;
 		}
 		if (animatedSprite.Animation == "WakeUp" && wakeUp)
 		{
@@ -289,9 +328,40 @@ public partial class Main : Node2D
 		}
 		if (animatedSprite.Animation == "SitDown")
 		{
+			if (!sleepy)
+			{
+				sitting = true;
+				animatedSprite.Play("Sit");
+				oldRandomChoice = 2;
+			}
+			else
+			{
+				animatedSprite.Play("Sleepy2");
+			}
+		}
+		if (animatedSprite.Animation == "SitFromSleep")
+		{
 			sitting = true;
 			animatedSprite.Play("Sit");
+			waitToFinish = false;
+			oldRandomChoice = 2;
 		}
+		if (animatedSprite.Animation == "SleepFromSit")
+		{
+			sleeping = true;
+			animatedSprite.Play("Sleep");
+			waitToFinish = false;
+			oldRandomChoice = 1;
+		}
+		if (animatedSprite.Animation == "Sleepy2")
+		{
+			animatedSprite.Play("Sleepy1");
+		}
+		else if (animatedSprite.Animation == "Sleepy1")
+		{
+			animatedSprite.Play("Sleepy2");
+		}
+
 	}
 }
 
