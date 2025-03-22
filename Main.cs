@@ -42,6 +42,7 @@ public partial class Main : Node2D
 	public override void _Process(double delta)
 	{
 		DetectScreenChange();
+		// make foreversleepy have increased chance of sleeping after
 		if (!isSleeping && !wakeUp && !foreverSit)
 		{
 			if (randomChoice == 0)
