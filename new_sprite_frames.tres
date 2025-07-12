@@ -1,7 +1,8 @@
-[gd_resource type="SpriteFrames" load_steps=59 format=3 uid="uid://b4ji7sr7ny5kp"]
+[gd_resource type="SpriteFrames" load_steps=65 format=3 uid="uid://b4ji7sr7ny5kp"]
 
 [ext_resource type="Texture2D" uid="uid://dh8gxjvu3kfcn" path="res://Bubasaur_sprite sheet.png" id="1_iab2k"]
 [ext_resource type="Texture2D" uid="uid://mjn1ojptikl5" path="res://RollF1.png" id="2_0d6mf"]
+[ext_resource type="Texture2D" uid="uid://bn87jub0bca54" path="res://Icon_B.png" id="2_jc6k7"]
 [ext_resource type="Texture2D" uid="uid://jdu1fiyb8lti" path="res://sleepF1.png" id="2_rww70"]
 [ext_resource type="Texture2D" uid="uid://bftyyftfx0ki6" path="res://walksprite1.png" id="2_uqfc3"]
 [ext_resource type="Texture2D" uid="uid://bkmo0d54cnddl" path="res://Sit.png" id="2_v16oe"]
@@ -18,6 +19,10 @@ region = Rect2(94, 0, 94, 86)
 [sub_resource type="AtlasTexture" id="AtlasTexture_eq2ai"]
 atlas = ExtResource("2_rww70")
 region = Rect2(188, 0, 94, 86)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_unqmp"]
+atlas = ExtResource("2_jc6k7")
+region = Rect2(0, 0, 82, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_15566"]
 atlas = ExtResource("2_0d6mf")
@@ -159,6 +164,22 @@ region = Rect2(80, 0, 80, 86)
 atlas = ExtResource("6_7t7hy")
 region = Rect2(0, 0, 80, 86)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ly5uw"]
+atlas = ExtResource("2_v16oe")
+region = Rect2(282, 0, 94, 86)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0cr38"]
+atlas = ExtResource("2_v16oe")
+region = Rect2(188, 0, 94, 86)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wml2e"]
+atlas = ExtResource("2_v16oe")
+region = Rect2(94, 0, 94, 86)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jrdr2"]
+atlas = ExtResource("2_v16oe")
+region = Rect2(0, 0, 94, 86)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_cyuql"]
 atlas = ExtResource("2_rww70")
 region = Rect2(188, 0, 94, 86)
@@ -229,6 +250,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"GoToSleep",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_unqmp")
+}],
+"loop": true,
+"name": &"Idle",
 "speed": 5.0
 }, {
 "frames": [{
@@ -374,6 +403,23 @@ animations = [{
 }],
 "loop": true,
 "name": &"Sleepy2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ly5uw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0cr38")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wml2e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jrdr2")
+}],
+"loop": true,
+"name": &"Stand",
 "speed": 5.0
 }, {
 "frames": [{

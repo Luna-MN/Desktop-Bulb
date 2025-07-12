@@ -203,7 +203,6 @@ public partial class Main : Node2D
 				animatedSprite.Play("GoToSleep");
 			}
 		}
-
 	}
 	public void sit()
 	{
@@ -303,6 +302,10 @@ public partial class Main : Node2D
 				sitting = false;
 				sleeping = false;
 				isSleeping = false;
+				if (!foreverSit)
+				{
+					animatedSprite.Play("Stand");
+				}
 			}
 		}
 		if (@event is InputEventKey keyEvent && keyEvent.Pressed)
@@ -362,7 +365,10 @@ public partial class Main : Node2D
 		{
 			animatedSprite.Play("Sleepy2");
 		}
-
+		else if (animatedSprite.Animation == "Stand")
+		{
+			animatedSprite.Play("Walk2");
+		}
 	}
 }
 

@@ -1,46 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://c1hswolx7rfm8"]
+[gd_scene load_steps=3 format=3 uid="uid://c1hswolx7rfm8"]
 
-[ext_resource type="Script" path="res://Main.cs" id="1_20g2b"]
+[ext_resource type="Script" path="res://Bulb.cs" id="1_c7isc"]
 [ext_resource type="SpriteFrames" uid="uid://b4ji7sr7ny5kp" path="res://new_sprite_frames.tres" id="4_lk8qd"]
 
-[sub_resource type="PackedScene" id="PackedScene_t2fa7"]
-_bundled = {
-"conn_count": 0,
-"conns": PackedInt32Array(),
-"editable_instances": [],
-"names": PackedStringArray("Window", "Window", "transparent_bg", "mode", "position", "size"),
-"node_count": 1,
-"node_paths": [],
-"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 4, 2, 0, 3, 1, 4, 2, 5, 3, 0),
-"variants": [true, 2, Vector2i(10, 30), Vector2i(1145, 620)],
-"version": 3
-}
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ipwwc"]
-size = Vector2(128, 123)
-
 [node name="Node2D" type="Node2D" node_paths=PackedStringArray("animatedSprite")]
-script = ExtResource("1_20g2b")
-windowScene = SubResource("PackedScene_t2fa7")
+script = ExtResource("1_c7isc")
 animatedSprite = NodePath("AnimatedSprite2D")
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(64, 63.5)
-shape = SubResource("RectangleShape2D_ipwwc")
-debug_color = Color(0.847059, 0.0980392, 0.87451, 0.419608)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(63, 62)
 scale = Vector2(1.57425, 1.49252)
 sprite_frames = ExtResource("4_lk8qd")
-animation = &"WakeUp"
+animation = &"Sleepy2"
 
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2(87, 80)
-
-[connection signal="mouse_entered" from="Area2D" to="." method="MouseEnterExit"]
-[connection signal="mouse_exited" from="Area2D" to="." method="MouseEnterExit"]
-[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimationFinished"]
-[connection signal="animation_looped" from="AnimatedSprite2D" to="." method="OnAnimationFinished"]
